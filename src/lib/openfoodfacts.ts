@@ -8,7 +8,7 @@ interface FoodNutrients {
 
 export async function searchFood(foodName: string): Promise<FoodNutrients | null> {
   // Use Lucene syntax to search for the food name and ensure nutrient data exists
-  const luceneQuery = `${foodName.toLowerCase()} AND _exists_:nutriments.energy-kcal_100g`;
+  const luceneQuery = `_exists_:nutriments.energy-kcal_100g`; // TEMPORARY: Test query
   const url = `/api/openfoodfacts/search?q=${encodeURIComponent(luceneQuery)}&page_size=1`;
   console.log(`Searching for: ${url}`);
   
@@ -22,6 +22,7 @@ export async function searchFood(foodName: string): Promise<FoodNutrients | null
 
   if (!product) {
     console.log(`No product with nutrient data found for "${foodName}"`);
+    console.log('Full API Response:', data);
     return null;
   }
 
