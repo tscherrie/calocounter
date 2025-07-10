@@ -1,5 +1,3 @@
-import type { FoodEntry } from './db';
-
 interface FoodNutrients {
   productName: string;
   calories: number; // per 100g
