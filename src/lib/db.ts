@@ -44,7 +44,9 @@ export async function addFoodEntry(entry: Omit<FoodEntry, 'id' | 'date'> & { dat
   const store = tx.objectStore('food-entries');
   const date = entry.date || new Date().toISOString().split('T')[0];
   const newEntry = { ...entry, date };
-  const id = await store.add(newEntry);
+  // We cast to `any` here because the store is auto-incrementing the ID,
+  // so we don't have an ID when we add the object.
+  const id = await store.add(newEntry as any);
   await tx.done;
   return { ...newEntry, id: id as number };
 }
