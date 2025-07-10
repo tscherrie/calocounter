@@ -15,7 +15,7 @@ export function VoiceRecorder() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-  const { apiKey, addFoodEntry: addFoodEntryToStore } = useStore();
+  const { addFoodEntry: addFoodEntryToStore } = useStore();
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
