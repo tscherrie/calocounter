@@ -150,15 +150,12 @@ export function VoiceRecorder() {
       <Button
         onClick={handleToggleRecording}
         size="lg"
-        className={`relative rounded-full w-24 h-24 transition-colors text-white shadow-card
-          ${isRecording ? 'bg-primary-dark' : 'bg-primary'}
-        `}
+        className={`rounded-full w-24 h-24 transition-colors ${
+          isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-primary'
+        }`}
         disabled={isProcessing || permissionStatus === 'denied'}
       >
-        {isRecording && (
-          <span className="absolute inset-0 rounded-full animate-pulse-ring bg-primary opacity-70"></span>
-        )}
-        <Mic className="w-12 h-12 relative" />
+        <Mic className="w-12 h-12" />
       </Button>
       <p className="text-sm text-muted-foreground">
         {getButtonText()}
