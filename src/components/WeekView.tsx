@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { getFoodEntriesForDate, FoodEntry } from '@/lib/db';
+import { getFoodEntriesForDate } from '@/lib/db';
+import type { FoodEntry } from '@/lib/db';
 import { eachDayOfInterval, startOfWeek, endOfWeek, format, subWeeks, addWeeks } from 'date-fns';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
