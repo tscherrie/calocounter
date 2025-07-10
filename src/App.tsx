@@ -7,10 +7,13 @@ import { useStore } from "@/lib/store";
 import { VoiceRecorder } from "@/components/VoiceRecorder";
 import { getFoodEntriesForDate } from "@/lib/db";
 import { FoodLog } from "@/components/FoodLog";
+import { WeekView } from "./components/WeekView";
+import { MonthView } from "./components/MonthView";
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { setApiKey, setFoodEntries } = useStore();
+  const [activeTab, setActiveTab] = useState("today");
 
   useEffect(() => {
     const storedApiKey = localStorage.getItem("openai_api_key");
@@ -18,10 +21,12 @@ function App() {
       setApiKey(storedApiKey);
     }
     
-    const today = new Date().toISOString().split("T")[0];
-    getFoodEntriesForDate(today).then(setFoodEntries);
+    if (activeTab === "today") {
+      const today = new Date().toISOString().split("T")[0];
+      getFoodEntriesForDate(today).then(setFoodEntries);
+    }
 
-  }, [setApiKey, setFoodEntries]);
+  }, [setApiKey, setFoodEntries, activeTab]);
 
   return (
     <div className="flex justify-center w-full">
@@ -33,7 +38,7 @@ function App() {
           </Button>
         </header>
         <main className="flex-grow p-4">
-          <Tabs defaultValue="today" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="today">Today</TabsTrigger>
               <TabsTrigger value="week">Week</TabsTrigger>
@@ -46,10 +51,10 @@ function App() {
               <FoodLog />
             </TabsContent>
             <TabsContent value="week">
-              Week's content will go here.
+              <WeekView />
             </TabsContent>
             <TabsContent value="month">
-              Month's content will go here.
+              <MonthView />
             </TabsContent>
           </Tabs>
         </main>
