@@ -55,7 +55,7 @@ function App() {
         </main>
         <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
       </div>
-    </div>
+      </div>
   );
 }
 

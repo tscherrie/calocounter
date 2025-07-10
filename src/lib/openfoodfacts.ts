@@ -16,6 +16,7 @@ export async function searchFood(foodName: string): Promise<FoodNutrients | null
   }
 
   const data = await response.json();
+  console.log('[searchFood] Raw response from API:', JSON.stringify(data, null, 2));
   
   if (!data.products || data.products.length === 0) {
     console.log(`No products found for "${foodName}"`);
