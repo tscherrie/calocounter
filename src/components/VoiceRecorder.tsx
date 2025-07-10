@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Mic } from 'lucide-react';
 import { transcribeAudio, getStructuredFoodData } from '@/lib/openai';
@@ -17,50 +17,49 @@ export function VoiceRecorder() {
   const audioChunksRef = useRef<Blob[]>([]);
   const { apiKey, addFoodEntry: addFoodEntryToStore } = useStore();
 
-  useEffect(() => {
-    // Check initial permission status
-    navigator.permissions.query({ name: 'microphone' as PermissionName }).then((permission) => {
-      setPermissionStatus(permission.state as PermissionState);
-      permission.onchange = () => {
-        setPermissionStatus(permission.state as PermissionState);
-      };
-    });
-  }, []);
-
-  const handleRecordingStop = async () => {
-    // Stop the stream tracks to turn off the microphone
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
+    setIsRecording(false);
+  }, []);
 
+
+  const handleRecordingStop = useCallback(async () => {
     const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
     audioChunksRef.current = [];
     setIsProcessing(true);
     try {
       const transcript = await transcribeAudio(audioBlob);
-      const foodData = await getStructuredFoodData(transcript);
+      if (!transcript) return;
       
+      const foodData = await getStructuredFoodData(transcript);
       if (!Array.isArray(foodData)) {
         throw new Error("AI response was not an array of food items.");
       }
 
       for (const item of foodData) {
-        const nutrientData = await searchFood(item.name);
-        if (nutrientData) {
-          const grams = item.grams || 100;
-          const entry = {
-            name: nutrientData.productName,
-            grams,
-            calories: (nutrientData.calories / 100) * grams,
-            carbs: (nutrientData.carbs / 100) * grams,
-            protein: (nutrientData.protein / 100) * grams,
-            fat: (nutrientData.fat / 100) * grams,
-          };
-          const newEntry = await addFoodEntryToDb(entry);
-          addFoodEntryToStore(newEntry);
-        } else {
-          console.warn(`Could not find nutrient data for ${item.name}`);
+        if (item.name) {
+            const nutrientData = await searchFood(item.name);
+            if (nutrientData) {
+            const grams = item.grams || 100;
+            const entry = {
+                name: nutrientData.productName,
+                grams,
+                calories: (nutrientData.calories / 100) * grams,
+                carbs: (nutrientData.carbs / 100) * grams,
+                protein: (nutrientData.protein / 100) * grams,
+                fat: (nutrientData.fat / 100) * grams,
+            };
+            const newEntry = await addFoodEntryToDb(entry);
+            addFoodEntryToStore(newEntry);
+            } else {
+            console.warn(`Could not find nutrient data for ${item.name}`);
+            }
         }
       }
     } catch (error) {
@@ -69,51 +68,66 @@ export function VoiceRecorder() {
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [addFoodEntryToStore]);
 
-  const handleRequestPermission = async () => {
+  const startRecording = useCallback(async () => {
+    if (isRecording || permissionStatus !== 'granted') return;
+
     try {
-      // This will trigger the browser's permission prompt
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // We got permission, we can close the tracks as we will request them again on record
-      stream.getTracks().forEach(track => track.stop());
-      setIsRecording(false); // Reset state to allow recording to start
+      streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunksRef.current = [];
+      
+      const recorder = new MediaRecorder(streamRef.current);
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+      
+      recorder.onstop = handleRecordingStop;
+      
+      recorder.start();
+      setIsRecording(true);
+
     } catch (error) {
-      console.error("Error requesting microphone permission:", error);
+      console.error("Error starting recording:", error);
+      setPermissionStatus('denied');
     }
-  };
+  }, [isRecording, permissionStatus, handleRecordingStop]);
 
   const handleToggleRecording = async () => {
-    if (!apiKey) {
-      alert("Please set your OpenAI API key in the settings first.");
-      return;
-    }
-
-    if (permissionStatus !== 'granted') {
-      handleRequestPermission();
-      return;
-    }
-
     if (isRecording) {
-      mediaRecorderRef.current?.stop();
-      setIsRecording(false);
+      stopRecording();
     } else {
-      try {
-        streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorderRef.current = new MediaRecorder(streamRef.current);
-        mediaRecorderRef.current.ondataavailable = (event) => {
-          audioChunksRef.current.push(event.data);
-        };
-        mediaRecorderRef.current.onstop = handleRecordingStop;
-        audioChunksRef.current = [];
-        mediaRecorderRef.current.start();
-        setIsRecording(true);
-      } catch (error) {
-        console.error("Error accessing microphone:", error);
-        alert("Could not access microphone. Please check permissions.");
+      if (permissionStatus !== 'granted') {
+        handleRequestPermission();
+      } else {
+        await startRecording();
       }
     }
   };
+  
+  const handleRequestPermission = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop());
+      setPermissionStatus('granted');
+    } catch (error) {
+      console.error("Error requesting microphone permission:", error);
+      setPermissionStatus('denied');
+    }
+  }, []);
+
+  useEffect(() => {
+    navigator.permissions.query({ name: 'microphone' as PermissionName }).then((permission) => {
+      setPermissionStatus(permission.state);
+      permission.onchange = () => {
+        setPermissionStatus(permission.state);
+      };
+    });
+  }, []);
 
   const getButtonText = () => {
     if (permissionStatus === 'denied') return 'Mic blocked';
