@@ -1,3 +1,5 @@
+import type { FoodEntry } from './db';
+
 interface FoodNutrients {
   productName: string;
   calories: number; // per 100g
@@ -7,9 +9,7 @@ interface FoodNutrients {
 }
 
 export async function searchFood(foodName: string): Promise<FoodNutrients | null> {
-  // Use Lucene syntax to search for the food name and ensure nutrient data exists
-  const luceneQuery = `_exists_:nutriments.energy-kcal_100g`; // TEMPORARY: Test query
-  const url = `/api/openfoodfacts/search?q=${encodeURIComponent(luceneQuery)}&page_size=1`;
+  const url = `/api/openfoodfacts/search?q=${encodeURIComponent(foodName.toLowerCase())}&page_size=20&json=true`;
   console.log(`Searching for: ${url}`);
   
   const response = await fetch(url);
@@ -18,15 +18,23 @@ export async function searchFood(foodName: string): Promise<FoodNutrients | null
   }
 
   const data = await response.json();
-  const product = data.products?.[0];
-
-  if (!product) {
-    console.log(`No product with nutrient data found for "${foodName}"`);
-    console.log('Full API Response:', data);
+  
+  if (!data.products || data.products.length === 0) {
+    console.log(`No products found for "${foodName}"`);
     return null;
   }
 
-  console.log(`Found product for "${foodName}":`, product);
+  // Find the first product with nutrient data
+  const product = data.products.find(
+    (p: any) => p.nutriments && p.nutriments['energy-kcal_100g']
+  );
+
+  if (!product) {
+    console.log(`No product with complete nutrient data found for "${foodName}" in the first ${data.products.length} results.`);
+    return null;
+  }
+
+  console.log(`Found product with nutrient data for "${foodName}":`, product);
   const nutriments = product.nutriments;
 
   return {
