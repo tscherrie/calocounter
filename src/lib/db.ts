@@ -65,4 +65,11 @@ export async function updateFoodEntry(entry: FoodEntry): Promise<FoodEntry> {
   await tx.store.put(entry);
   await tx.done;
   return entry;
+}
+
+export async function deleteFoodEntry(id: number): Promise<void> {
+  const db = await getDb();
+  const tx = db.transaction('food-entries', 'readwrite');
+  await tx.store.delete(id);
+  await tx.done;
 } 
