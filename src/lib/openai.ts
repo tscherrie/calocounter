@@ -22,6 +22,7 @@ export async function transcribeAudio(audioBlob: Blob) {
 }
 
 export async function getStructuredFoodData(text: string) {
+  console.log(`[OpenAI] Getting structured data for text: "${text}"`);
   const openai = getOpenAIClient();
   const prompt = `The user said: "${text}". Extract the food items and their weights in grams. Respond with a valid JSON array of objects, where each object has a "name" (string) and "grams" (number). If the weight is not specified, default to 100 grams. For example: [{"name": "chicken breast", "grams": 200}, {"name": "a banana", "grams": 100}]`;
 

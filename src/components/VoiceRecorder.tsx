@@ -31,10 +31,18 @@ export function VoiceRecorder() {
 
   const handleRecordingStop = useCallback(async () => {
     const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
+    console.log(`[VoiceRecorder] Audio blob size: ${audioBlob.size} bytes`);
     audioChunksRef.current = [];
     setIsProcessing(true);
     try {
       const transcript = await transcribeAudio(audioBlob);
+      console.log(`[VoiceRecorder] Transcript received: "${transcript}"`);
+      if (!transcript || transcript.trim().length === 0) {
+        alert("Could not understand audio. Please try speaking clearly.");
+        setIsProcessing(false);
+        return;
+      }
+
       if (!transcript) return;
       
       const foodData = await getStructuredFoodData(transcript);

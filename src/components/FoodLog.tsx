@@ -15,6 +15,7 @@ import { EditFoodEntryDialog } from "./EditFoodEntryDialog";
 import type { FoodEntry } from "@/lib/db";
 import { updateFoodEntry as updateFoodEntryInDb } from "@/lib/db";
 import { searchFood } from "@/lib/openfoodfacts";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function FoodLog() {
   const { foodEntries, updateFoodEntry: updateFoodEntryInStore } = useStore();
@@ -60,48 +61,54 @@ export function FoodLog() {
 
   return (
     <div className="mt-4">
-      <h2 className="text-xl font-semibold mb-2">Today's Log</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Food</TableHead>
-            <TableHead className="text-right">Grams</TableHead>
-            <TableHead className="text-right">Calories</TableHead>
-            <TableHead className="text-right">Protein (g)</TableHead>
-            <TableHead className="text-right">Carbs (g)</TableHead>
-            <TableHead className="text-right">Fat (g)</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {foodEntries.map((entry) => (
-            <TableRow key={entry.id}>
-              <TableCell className="font-medium">{entry.name}</TableCell>
-              <TableCell className="text-right">{entry.grams.toFixed(0)}</TableCell>
-              <TableCell className="text-right">{entry.calories.toFixed(0)}</TableCell>
-              <TableCell className="text-right">{entry.protein.toFixed(1)}</TableCell>
-              <TableCell className="text-right">{entry.carbs.toFixed(1)}</TableCell>
-              <TableCell className="text-right">{entry.fat.toFixed(1)}</TableCell>
-              <TableCell className="text-right">
-                <Button variant="ghost" size="icon" onClick={() => setEditingEntry(entry)}>
-                  <Pencil className="w-4 h-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow className="font-bold">
-            <TableCell>Total</TableCell>
-            <TableCell></TableCell>
-            <TableCell className="text-right">{totals.calories.toFixed(0)}</TableCell>
-            <TableCell className="text-right">{totals.protein.toFixed(1)}</TableCell>
-            <TableCell className="text-right">{totals.carbs.toFixed(1)}</TableCell>
-            <TableCell className="text-right">{totals.fat.toFixed(1)}</TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+      <Card>
+        <CardHeader>
+          <CardTitle>Today's Log</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Food</TableHead>
+                <TableHead className="text-right">Grams</TableHead>
+                <TableHead className="text-right">Calories</TableHead>
+                <TableHead className="text-right">Protein (g)</TableHead>
+                <TableHead className="text-right">Carbs (g)</TableHead>
+                <TableHead className="text-right">Fat (g)</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {foodEntries.map((entry) => (
+                <TableRow key={entry.id}>
+                  <TableCell className="font-medium">{entry.name}</TableCell>
+                  <TableCell className="text-right">{entry.grams.toFixed(0)}</TableCell>
+                  <TableCell className="text-right">{entry.calories.toFixed(0)}</TableCell>
+                  <TableCell className="text-right">{entry.protein.toFixed(1)}</TableCell>
+                  <TableCell className="text-right">{entry.carbs.toFixed(1)}</TableCell>
+                  <TableCell className="text-right">{entry.fat.toFixed(1)}</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" onClick={() => setEditingEntry(entry)}>
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow className="font-bold">
+                <TableCell>Total</TableCell>
+                <TableCell></TableCell>
+                <TableCell className="text-right">{totals.calories.toFixed(0)}</TableCell>
+                <TableCell className="text-right">{totals.protein.toFixed(1)}</TableCell>
+                <TableCell className="text-right">{totals.carbs.toFixed(1)}</TableCell>
+                <TableCell className="text-right">{totals.fat.toFixed(1)}</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
       <EditFoodEntryDialog
         entry={editingEntry}
         onClose={() => setEditingEntry(null)}
