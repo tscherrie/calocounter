@@ -14,6 +14,13 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { setApiKey, setFoodEntries } = useStore();
   const [activeTab, setActiveTab] = useState("today");
+  const [targetDate, setTargetDate] = useState(new Date());
+
+  const handleSetTargetDate = (date: Date) => {
+    setTargetDate(date);
+    // You might want a different logic here, e.g. not always switching to today
+    // For now, this provides a way to navigate
+  };
 
   useEffect(() => {
     const storedApiKey = localStorage.getItem("openai_api_key");
@@ -22,11 +29,11 @@ function App() {
     }
     
     if (activeTab === "today") {
-      const today = new Date().toISOString().split("T")[0];
-      getFoodEntriesForDate(today).then(setFoodEntries);
+      const dateString = new Date(targetDate).toISOString().split("T")[0];
+      getFoodEntriesForDate(dateString).then(setFoodEntries);
     }
 
-  }, [setApiKey, setFoodEntries, activeTab]);
+  }, [setApiKey, setFoodEntries, activeTab, targetDate]);
 
   return (
     <div className="flex justify-center w-full">
@@ -48,13 +55,24 @@ function App() {
               <div className="flex justify-center py-8">
                 <VoiceRecorder />
               </div>
-              <FoodLog />
+              <FoodLog targetDate={targetDate} />
             </TabsContent>
             <TabsContent value="week">
-              <WeekView />
+              <WeekView 
+                targetDate={targetDate} 
+                onDayClick={(date) => {
+                  setTargetDate(date);
+                  setActiveTab("today");
+                }}
+              />
             </TabsContent>
             <TabsContent value="month">
-              <MonthView />
+              <MonthView 
+                onWeekClick={(date) => {
+                  setTargetDate(date);
+                  setActiveTab("week");
+                }}
+              />
             </TabsContent>
           </Tabs>
         </main>

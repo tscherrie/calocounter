@@ -6,6 +6,11 @@ import { eachDayOfInterval, startOfWeek, endOfWeek, format, subWeeks, addWeeks }
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+interface WeekViewProps {
+  targetDate: Date;
+  onDayClick: (date: Date) => void;
+}
+
 // This is a simplified approach. For a real app, you'd want to fetch all data once
 // and filter it, or have more complex DB queries.
 async function getEntriesForWeek(date: Date): Promise<Map<string, FoodEntry[]>> {
@@ -22,8 +27,8 @@ async function getEntriesForWeek(date: Date): Promise<Map<string, FoodEntry[]>> 
   return entriesByDay;
 }
 
-export function WeekView() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+export function WeekView({ targetDate, onDayClick }: WeekViewProps) {
+  const [currentDate, setCurrentDate] = useState(targetDate);
   const [entries, setEntries] = useState<Map<string, FoodEntry[]>>(new Map());
   const [isLoading, setIsLoading] = useState(true);
 
@@ -73,7 +78,11 @@ export function WeekView() {
         ) : (
           <div className="space-y-4">
             {Array.from(dailyTotals.entries()).map(([date, total]) => (
-              <div key={date} className="flex justify-between p-2 rounded-lg odd:bg-muted">
+              <button 
+                key={date}
+                className="flex justify-between p-2 rounded-lg odd:bg-muted w-full text-left"
+                onClick={() => onDayClick(new Date(date))}
+              >
                 <p className="font-semibold">{format(new Date(date), 'EEEE, MMM d')}</p>
                 <div className="text-right">
                   <p>{total.calories.toFixed(0)} kcal</p>
@@ -81,7 +90,7 @@ export function WeekView() {
                     P: {total.protein.toFixed(0)}g | C: {total.carbs.toFixed(0)}g | F: {total.fat.toFixed(0)}g
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}

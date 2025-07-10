@@ -16,8 +16,9 @@ import type { FoodEntry } from "@/lib/db";
 import { updateFoodEntry as updateFoodEntryInDb } from "@/lib/db";
 import { searchFood } from "@/lib/openfoodfacts";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { format } from 'date-fns';
 
-export function FoodLog() {
+export function FoodLog({ targetDate }: { targetDate: Date }) {
   const { foodEntries, updateFoodEntry: updateFoodEntryInStore } = useStore();
   const [editingEntry, setEditingEntry] = useState<FoodEntry | null>(null);
 
@@ -63,7 +64,7 @@ export function FoodLog() {
     <div className="mt-4">
       <Card>
         <CardHeader>
-          <CardTitle>Today's Log</CardTitle>
+          <CardTitle>Log for {format(targetDate, 'EEEE, MMM d, yyyy')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>

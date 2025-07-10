@@ -15,6 +15,10 @@ import {
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+interface MonthViewProps {
+  onWeekClick: (date: Date) => void;
+}
+
 async function getEntriesForMonth(date: Date): Promise<FoodEntry[]> {
   const monthStart = startOfMonth(date);
   const monthEnd = endOfMonth(date);
@@ -29,7 +33,7 @@ async function getEntriesForMonth(date: Date): Promise<FoodEntry[]> {
   return allEntries;
 }
 
-export function MonthView() {
+export function MonthView({ onWeekClick }: MonthViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [entries, setEntries] = useState<FoodEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,7 +91,11 @@ export function MonthView() {
         ) : (
           <div className="space-y-4">
             {weeklyTotals.map(week => (
-              <div key={week.startDate.toISOString()} className="flex justify-between p-2 rounded-lg odd:bg-muted">
+              <button
+                key={week.startDate.toISOString()}
+                className="flex justify-between p-2 rounded-lg odd:bg-muted w-full text-left"
+                onClick={() => onWeekClick(week.startDate)}
+              >
                 <p className="font-semibold">
                   Week of {format(week.startDate, 'MMM d')}
                 </p>
@@ -97,7 +105,7 @@ export function MonthView() {
                     Avg Daily: P: {(week.protein / 7).toFixed(0)}g | C: {(week.carbs / 7).toFixed(0)}g | F: {(week.fat / 7).toFixed(0)}g
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
