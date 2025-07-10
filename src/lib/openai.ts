@@ -38,20 +38,27 @@ export async function getStructuredFoodData(text: string) {
   }
 
   try {
-    // The model is asked for an array, but the JSON object mode might wrap it.
-    // We will parse it and find the array.
     const parsed = JSON.parse(content);
-    // Let's assume the array is the first value in the object if it's not the root.
+
+    // Case 1: The response is already the array we want.
     if (Array.isArray(parsed)) {
       return parsed;
     }
+
+    // Case 2: The array is wrapped in an object, e.g., { "foods": [...] }
     const key = Object.keys(parsed)[0];
-    if (Array.isArray(parsed[key])) {
+    if (key && Array.isArray(parsed[key])) {
         return parsed[key];
     }
+
+    // Case 3: The response is a single object for a single food item.
+    if (typeof parsed === 'object' && parsed !== null && 'name' in parsed && 'grams' in parsed) {
+      return [parsed]; // Wrap the single object in an array
+    }
+
     throw new Error("JSON response from OpenAI is not in the expected format.");
   } catch (error) {
-    console.error("Error parsing JSON from OpenAI:", content);
+    console.error("Error parsing JSON from OpenAI:", content, error);
     throw new Error("Failed to parse structured data from OpenAI.");
   }
 } 
