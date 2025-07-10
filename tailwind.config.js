@@ -1,7 +1,7 @@
-const { fontFamily } = require("tailwindcss/defaultTheme")
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -19,17 +19,17 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", ...fontFamily.sans],
-        heading: ["var(--font-poppins)", ...fontFamily.sans],
+        sans: ["var(--font-inter)", "sans-serif"],
+        heading: ["var(--font-poppins)", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0" },
         },
       },
       animation: {
@@ -38,5 +38,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } 
