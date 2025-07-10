@@ -7,7 +7,7 @@ interface FoodNutrients {
 }
 
 export async function searchFood(foodName: string): Promise<FoodNutrients | null> {
-  const url = `/api/openfoodfacts/search?q=${encodeURIComponent(foodName)}&page_size=1`;
+  const url = `/api/openfoodfacts/search?q=${encodeURIComponent(foodName.toLowerCase())}&page_size=1`;
   console.log(`Searching for: ${url}`);
   
   const response = await fetch(url);
