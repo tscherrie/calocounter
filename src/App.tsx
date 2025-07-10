@@ -16,12 +16,6 @@ function App() {
   const [activeTab, setActiveTab] = useState("today");
   const [targetDate, setTargetDate] = useState(new Date());
 
-  const handleSetTargetDate = (date: Date) => {
-    setTargetDate(date);
-    // You might want a different logic here, e.g. not always switching to today
-    // For now, this provides a way to navigate
-  };
-
   useEffect(() => {
     const storedApiKey = localStorage.getItem("openai_api_key");
     if (storedApiKey) {
