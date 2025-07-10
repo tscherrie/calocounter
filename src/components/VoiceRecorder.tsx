@@ -146,21 +146,21 @@ export function VoiceRecorder() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 my-8">
+    <div className="flex flex-col items-center gap-4">
       <Button
         onClick={handleToggleRecording}
         size="lg"
-        className={`relative rounded-full w-28 h-28 transition-all duration-300
-          bg-gradient-to-br from-teal-400 to-green-500 hover:from-teal-500 hover:to-green-600
-          text-white shadow-lg hover:shadow-xl
-          ${isRecording ? 'animate-pulse scale-105' : ''}
+        className={`relative rounded-full w-24 h-24 transition-colors text-white shadow-card
+          ${isRecording ? 'bg-primary-dark' : 'bg-primary'}
         `}
         disabled={isProcessing || permissionStatus === 'denied'}
       >
-        <Mic className="w-14 h-14" />
-        {isRecording && <span className="absolute w-full h-full rounded-full bg-red-500 opacity-50 animate-ping"></span>}
+        {isRecording && (
+          <span className="absolute inset-0 rounded-full animate-pulse-ring bg-primary opacity-70"></span>
+        )}
+        <Mic className="w-12 h-12 relative" />
       </Button>
-      <p className="text-lg font-medium text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         {getButtonText()}
       </p>
     </div>

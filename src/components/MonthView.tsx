@@ -89,18 +89,18 @@ export function MonthView({ onWeekClick }: MonthViewProps) {
         {isLoading ? (
           <p>Loading...</p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-4">
             {weeklyTotals.map(week => (
               <button
                 key={week.startDate.toISOString()}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-muted w-full text-left"
+                className="flex justify-between p-2 rounded-lg odd:bg-muted w-full text-left"
                 onClick={() => onWeekClick(week.startDate)}
               >
                 <p className="font-semibold">
                   Week of {format(week.startDate, 'MMM d')}
                 </p>
                 <div className="text-right">
-                  <p className="font-semibold">{(week.calories / 7).toFixed(0)} kcal / day</p>
+                  <p>{(week.calories / 7).toFixed(0)} kcal / day</p>
                   <p className="text-sm text-muted-foreground">
                     Avg Daily: P: {(week.protein / 7).toFixed(0)}g | C: {(week.carbs / 7).toFixed(0)}g | F: {(week.fat / 7).toFixed(0)}g
                   </p>

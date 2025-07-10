@@ -8,7 +8,6 @@ interface AppState {
   setFoodEntries: (entries: FoodEntry[]) => void;
   addFoodEntry: (entry: FoodEntry) => void;
   updateFoodEntry: (entry: FoodEntry) => void;
-  removeFoodEntry: (id: number) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -19,8 +18,5 @@ export const useStore = create<AppState>((set) => ({
   addFoodEntry: (entry) => set((state) => ({ foodEntries: [...state.foodEntries, entry] })),
   updateFoodEntry: (entry) => set((state) => ({
     foodEntries: state.foodEntries.map((e) => e.id === entry.id ? entry : e),
-  })),
-  removeFoodEntry: (id) => set((state) => ({
-    foodEntries: state.foodEntries.filter((e) => e.id !== id),
   })),
 })); 

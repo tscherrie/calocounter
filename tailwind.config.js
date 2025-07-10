@@ -1,42 +1,40 @@
-import tailwindcssAnimate from 'tailwindcss-animate';
-
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
-        heading: ["var(--font-poppins)", "sans-serif"],
+        sans: ['Inter', 'sans-serif'],
+      },
+      colors: {
+        primary: {
+          DEFAULT: '#FF7A18',
+          dark: '#AF002D',
+        },
+        indigo: {
+          500: '#4F46E5',
+        },
+      },
+      boxShadow: {
+        card: '0 8px 24px rgba(0,0,0,0.05)',
+      },
+      borderRadius: {
+        xl: '1rem',
+        '2xl': '1.25rem',
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+        pulseRing: {
+          '0%': { transform: 'scale(0.9)', opacity: '0.8' },
+          '70%, 100%': { transform: 'scale(1.4)', opacity: '0' },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        'pulse-ring': 'pulseRing 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [],
 } 
