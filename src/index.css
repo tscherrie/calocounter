@@ -89,7 +89,7 @@
 
 @layer base {
   * {
-    @apply border-muted;
+    border-color: hsl(var(--border));
   }
   
   html {
@@ -97,7 +97,9 @@
   }
   
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    transition: color 0.3s ease;
     /* Dynamic Gradient Background */
     background: linear-gradient(
       135deg,
@@ -131,7 +133,10 @@
 @layer components {
   /* Glass Card Component */
   .glass-card {
-    @apply relative overflow-hidden rounded-2xl border;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
@@ -141,7 +146,9 @@
   
   .glass-card::before {
     content: '';
-    @apply absolute inset-0 rounded-2xl;
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
     pointer-events: none;
   }
@@ -189,25 +196,30 @@
   }
   
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    background: transparent;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-emerald-500/30 rounded-full;
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 9999px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-emerald-500/50;
+    background: rgba(16, 185, 129, 0.5);
   }
   
   /* Enhanced Focus Styles */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-white;
+  .focus-ring:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5), 0 0 0 4px white;
   }
   
   /* Button Variants */
   .btn-gradient {
-    @apply relative overflow-hidden font-medium transition-all duration-300;
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+    transition: all 0.3s ease;
     background: linear-gradient(135deg, var(--emerald-500), var(--ocean-500));
     background-size: 200% 200%;
   }
@@ -224,22 +236,48 @@
   
   /* Tab Enhancements */
   .tab-indicator {
-    @apply absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-ocean-500 transition-all duration-300;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--emerald-500), var(--ocean-500));
+    transition: all 0.3s ease;
   }
   
   /* Data Visualization */
   .progress-bar {
-    @apply relative overflow-hidden rounded-full bg-muted;
+    position: relative;
+    overflow: hidden;
+    border-radius: 9999px;
+    background-color: hsl(var(--muted));
   }
   
   .progress-fill {
-    @apply h-full rounded-full transition-all duration-500 ease-out;
+    height: 100%;
+    border-radius: 9999px;
+    transition: all 0.5s ease-out;
     background: linear-gradient(90deg, var(--emerald-500), var(--ocean-500));
   }
   
   /* Nutrition Cards */
   .nutrition-card {
-    @apply glass-card p-6 hover:scale-105 transition-all duration-300 cursor-pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .nutrition-card:hover {
+    transform: scale(1.05);
+    box-shadow: var(--glass-shadow), 0 0 30px rgba(16, 185, 129, 0.2);
   }
   
   .nutrition-card:hover {
@@ -248,7 +286,10 @@
   
   /* Voice Recording Styles */
   .voice-button {
-    @apply relative overflow-hidden rounded-full transition-all duration-300;
+    position: relative;
+    overflow: hidden;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
     background: linear-gradient(135deg, var(--emerald-500), var(--ocean-500));
   }
   
@@ -258,17 +299,23 @@
   
   .voice-button::before {
     content: '';
-    @apply absolute inset-0 rounded-full opacity-0 transition-opacity duration-300;
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
   }
   
   .voice-button:hover::before {
-    @apply opacity-100;
+    opacity: 1;
   }
   
   /* Loading States */
   .skeleton {
-    @apply animate-pulse bg-muted rounded;
+    animation: pulse 2s infinite;
+    background-color: hsl(var(--muted));
+    border-radius: 0.375rem;
   }
   
   .loading-spinner {
@@ -279,7 +326,12 @@
 @layer utilities {
   /* Text Utilities */
   .text-gradient {
-    @apply gradient-text;
+    background: linear-gradient(135deg, var(--emerald-500), var(--ocean-500), var(--luxury-500));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 3s ease infinite;
   }
   
   .text-balance {
@@ -294,11 +346,11 @@
   
   /* Animation Utilities */
   .animate-in {
-    @apply animate-fade-in;
+    animation: fade-in 0.5s ease-out;
   }
   
   .animate-slide {
-    @apply animate-slide-in;
+    animation: slide-in 0.3s ease-out;
   }
   
   /* Glass Utilities */
@@ -310,6 +362,16 @@
   .glass-heavy {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(30px);
+  }
+}
+
+/* Keyframe Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
 }
 
