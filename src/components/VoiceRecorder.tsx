@@ -141,23 +141,27 @@ export function VoiceRecorder() {
     if (permissionStatus === 'denied') return 'Mic blocked';
     if (permissionStatus === 'prompt') return 'Allow Mic';
     if (isProcessing) return 'Processing...';
-    if (isRecording) return 'Recording...';
+    if (isRecording) return 'Recording... Stop anytime.';
     return 'Tap to record';
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center justify-center gap-4 my-8">
       <Button
         onClick={handleToggleRecording}
         size="lg"
-        className={`rounded-full w-24 h-24 transition-colors ${
-          isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-primary'
-        }`}
+        className={`relative rounded-full w-28 h-28 transition-colors duration-300 ease-in-out
+          ${ isRecording 
+              ? 'bg-red-500/80 hover:bg-red-600/80' 
+              : 'bg-primary/80 hover:bg-primary/90 animate-pulse-glow'
+          }
+          shadow-lg shadow-primary/20
+        `}
         disabled={isProcessing || permissionStatus === 'denied'}
       >
-        <Mic className="w-12 h-12" />
+        <Mic className="w-16 h-16 text-primary-foreground" />
       </Button>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-lg font-medium text-center text-muted-foreground">
         {getButtonText()}
       </p>
     </div>

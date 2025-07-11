@@ -62,7 +62,7 @@ export function WeekView({ targetDate, onDayClick }: WeekViewProps) {
   const handleNextWeek = () => setCurrentDate(addWeeks(currentDate, 1));
   
   return (
-    <Card className="mt-4">
+    <Card className="mt-4 glassmorphism">
       <CardHeader>
         <div className="flex items-center justify-between">
           <Button variant="ghost" size="icon" onClick={handlePrevWeek}><ChevronLeft /></Button>
@@ -74,18 +74,20 @@ export function WeekView({ targetDate, onDayClick }: WeekViewProps) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <p>Loading...</p>
+          <div className="flex justify-center items-center h-48">
+            <p>Loading week...</p>
+          </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-2">
             {Array.from(dailyTotals.entries()).map(([date, total]) => (
               <button 
                 key={date}
-                className="flex justify-between p-2 rounded-lg odd:bg-muted w-full text-left"
+                className="flex justify-between items-center p-4 rounded-lg hover:bg-primary/10 w-full text-left transition-colors"
                 onClick={() => onDayClick(new Date(date))}
               >
-                <p className="font-semibold">{format(new Date(date), 'EEEE, MMM d')}</p>
+                <p className="font-semibold text-lg">{format(new Date(date), 'EEEE, MMM d')}</p>
                 <div className="text-right">
-                  <p>{total.calories.toFixed(0)} kcal</p>
+                  <p className="font-bold">{total.calories.toFixed(0)} kcal</p>
                   <p className="text-sm text-muted-foreground">
                     P: {total.protein.toFixed(0)}g | C: {total.carbs.toFixed(0)}g | F: {total.fat.toFixed(0)}g
                   </p>

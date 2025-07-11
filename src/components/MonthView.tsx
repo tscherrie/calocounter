@@ -75,7 +75,7 @@ export function MonthView({ onWeekClick }: MonthViewProps) {
   const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
   
   return (
-    <Card className="mt-4">
+    <Card className="mt-4 glassmorphism">
       <CardHeader>
         <div className="flex items-center justify-between">
           <Button variant="ghost" size="icon" onClick={handlePrevMonth}><ChevronLeft /></Button>
@@ -87,20 +87,22 @@ export function MonthView({ onWeekClick }: MonthViewProps) {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <p>Loading...</p>
+          <div className="flex justify-center items-center h-48">
+            <p>Loading month...</p>
+          </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-2">
             {weeklyTotals.map(week => (
               <button
                 key={week.startDate.toISOString()}
-                className="flex justify-between p-2 rounded-lg odd:bg-muted w-full text-left"
+                className="flex justify-between items-center p-4 rounded-lg hover:bg-primary/10 w-full text-left transition-colors"
                 onClick={() => onWeekClick(week.startDate)}
               >
-                <p className="font-semibold">
+                <p className="font-semibold text-lg">
                   Week of {format(week.startDate, 'MMM d')}
                 </p>
                 <div className="text-right">
-                  <p>{(week.calories / 7).toFixed(0)} kcal / day</p>
+                  <p className="font-bold">{(week.calories / 7).toFixed(0)} kcal / day</p>
                   <p className="text-sm text-muted-foreground">
                     Avg Daily: P: {(week.protein / 7).toFixed(0)}g | C: {(week.carbs / 7).toFixed(0)}g | F: {(week.fat / 7).toFixed(0)}g
                   </p>
