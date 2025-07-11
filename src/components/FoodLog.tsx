@@ -6,7 +6,7 @@ import { EditFoodEntryDialog } from "./EditFoodEntryDialog";
 import type { FoodEntry } from "@/lib/db";
 import { updateFoodEntry as updateFoodEntryInDb } from "@/lib/db";
 import { searchFood } from "@/lib/openfoodfacts";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { format } from 'date-fns';
 
 export function FoodLog({ targetDate }: { targetDate: Date }) {
