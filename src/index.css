@@ -319,7 +319,13 @@
   }
   
   .loading-spinner {
-    @apply w-6 h-6 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin;
+    width: 1.5rem; /* w-6 */
+    height: 1.5rem; /* h-6 */
+    border-width: 2px;
+    border-color: rgba(16, 185, 129, 0.3); /* border-emerald-500/30 */
+    border-top-color: rgb(16, 185, 129); /* border-t-emerald-500 */
+    border-radius: 9999px; /* rounded-full */
+    animation: spin 1s linear infinite; /* animate-spin */
   }
 }
 
