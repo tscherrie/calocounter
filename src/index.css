@@ -3,95 +3,57 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* ------------- Design Tokens ------------- */
+:root {
+  /* Light mode colours */
+  --clr-bg: 0 0% 100%;
+  --clr-fg: 222.2 84% 4.9%;
+  --clr-primary: 262.1 83.3% 57.8%; /* violet */
+  --clr-primary-end: 327.8 83.3% 57.8%; /* pink */
+  --clr-muted: 210 40% 96.1%;
+  --clr-border: 214.3 31.8% 91.4%;
+  --radius-base: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
   :root {
-    --background: 200 20% 98%;
-    --foreground: 200 10% 10%;
-
-    --card: 200 20% 98%;
-    --card-foreground: 200 10% 10%;
- 
-    --popover: 200 20% 98%;
-    --popover-foreground: 200 10% 10%;
- 
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 142.1 76.2% 96.3%;
-    --primary-glow: 142.1 76.2% 46.3%;
- 
-    --secondary: 200 15% 93%;
-    --secondary-foreground: 200 10% 20%;
- 
-    --muted: 200 15% 93%;
-    --muted-foreground: 200 10% 40%;
- 
-    --accent: 200 15% 90%;
-    --accent-foreground: 200 10% 5%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 200 10% 90%;
-    --input: 200 10% 85%;
-    --ring: 142.1 76.2% 36.3%;
- 
-    --radius: 0.75rem;
-  }
- 
-  .dark {
-    --background: 200 10% 10%;
-    --foreground: 200 20% 98%;
- 
-    --card: 200 10% 10%;
-    --card-foreground: 200 20% 98%;
- 
-    --popover: 200 10% 10%;
-    --popover-foreground: 200 20% 98%;
- 
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 142.1 76.2% 96.3%;
-    --primary-glow: 142.1 76.2% 46.3%;
-
-    --secondary: 200 10% 20%;
-    --secondary-foreground: 200 20% 98%;
- 
-    --muted: 200 10% 20%;
-    --muted-foreground: 200 20% 60%;
- 
-    --accent: 200 10% 15%;
-    --accent-foreground: 200 20% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 100%;
- 
-    --border: 200 10% 25%;
-    --input: 200 10% 25%;
-    --ring: 142.1 76.2% 36.3%;
+    --clr-bg: 222.2 84% 4.9%;
+    --clr-fg: 210 40% 98%;
+    --clr-muted: 210 40% 9.8%;
+    --clr-border: 217.2 32.6% 17.5%;
   }
 }
 
-@layer base {
+/* ------------- Base Styles ------------- */
+*,::before,::after {
+  border-color: hsl(var(--clr-border));
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: hsl(var(--clr-bg));
+  color: hsl(var(--clr-fg));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* subtle gradient backdrop */
+  background-image: linear-gradient(to top, #f0f3f5 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
   body {
-    font-family: 'Inter', sans-serif;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    min-height: 100vh;
-    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-  }
-
-  .dark body {
-    background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
+    background-image: linear-gradient(to right, #1f1e25 0%, #2b2a33 100%);
   }
 }
 
-@layer components {
-  .glassmorphism {
-    background-color: rgba(255, 255, 255, 0.2);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  .dark .glassmorphism {
-    background-color: rgba(20, 20, 20, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
+/* Gradient utility */
+.bg-gradient-primary {
+  background-image: linear-gradient(135deg, hsl(var(--clr-primary)) 0%, hsl(var(--clr-primary-end)) 100%);
+  color: #fff;
+}
+
+.shadow-elevated {
+  box-shadow: 0 8px 24px 0 rgba(0,0,0,0.08);
 }
