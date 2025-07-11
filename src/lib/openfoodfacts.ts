@@ -1,3 +1,13 @@
+interface FoodProduct {
+  product_name: string;
+  nutriments?: {
+    'energy-kcal_100g'?: number;
+    proteins_100g?: number;
+    carbohydrates_100g?: number;
+    fat_100g?: number;
+  };
+}
+
 interface FoodNutrients {
   productName: string;
   calories: number; // per 100g
@@ -6,7 +16,7 @@ interface FoodNutrients {
   fat: number; // per 100g
 }
 
-export async function searchFood(foodName: string): Promise<FoodNutrients | null> {
+export async function searchFood(foodName: string): Promise<FoodProduct[]> {
   const url = `/api/openfoodfacts/search?q=${encodeURIComponent(foodName.toLowerCase())}&page_size=5&json=true`;
   console.log(`Searching for: ${url}`);
   
@@ -20,20 +30,29 @@ export async function searchFood(foodName: string): Promise<FoodNutrients | null
   
   if (!data.hits || data.hits.length === 0) {
     console.log(`No products found for "${foodName}"`);
-    return null;
+    return [];
   }
 
-  // Find the first product with nutrient data
-  const product = data.hits.find(
+  // Filter products with nutrient data
+  const productsWithNutrients = data.hits.filter(
     (p: any) => p.nutriments && p.nutriments['energy-kcal_100g']
   );
 
-  if (!product) {
-    console.log(`No product with complete nutrient data found for "${foodName}" in the first ${data.hits.length} results.`);
-    return null;
+  if (productsWithNutrients.length === 0) {
+    console.log(`No products with complete nutrient data found for "${foodName}".`);
+    return [];
   }
 
-  console.log(`Found product with nutrient data for "${foodName}":`, product);
+  console.log(`Found ${productsWithNutrients.length} products with nutrient data for "${foodName}"`);
+  return productsWithNutrients;
+}
+
+// Legacy function for backward compatibility
+export async function searchFoodLegacy(foodName: string): Promise<FoodNutrients | null> {
+  const products = await searchFood(foodName);
+  if (products.length === 0) return null;
+  
+  const product = products[0];
   const nutriments = product.nutriments;
 
   return {
