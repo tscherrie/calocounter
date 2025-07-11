@@ -77,7 +77,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 value={localApiKey}
                 onChange={(e) => setLocalApiKey(e.target.value)}
                 placeholder="sk-..."
-                className="pr-12 glass-light border-border/50 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                className="pr-12 glass-light border-muted/50 focus:border-emerald-500/50 focus:ring-emerald-500/20"
               />
               <Button
                 type="button"
@@ -129,7 +129,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           <Button 
             variant="outline" 
             onClick={handleCancel}
-            className="glass-light hover:glass-heavy border-border/50"
+            className="glass-light hover:glass-heavy border-muted/50"
           >
             Cancel
           </Button>

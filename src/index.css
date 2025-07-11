@@ -1,6 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
-@import "tw-animate-css";
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -89,7 +89,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-muted;
   }
   
   html {
@@ -102,9 +102,9 @@
     background: linear-gradient(
       135deg,
       hsl(var(--background)) 0%,
-      color-mix(in hsl, hsl(var(--background)), #10b981 5%) 25%,
-      color-mix(in hsl, hsl(var(--background)), #0ea5e9 3%) 50%,
-      color-mix(in hsl, hsl(var(--background)), #a855f7 4%) 75%,
+      #fafafa 25%,
+      #f8fafc 50%,
+      #f1f5f9 75%,
       hsl(var(--background)) 100%
     );
     background-size: 400% 400%;
@@ -118,9 +118,9 @@
     background: linear-gradient(
       135deg,
       #0f172a 0%,
-      color-mix(in hsl, #0f172a, #10b981 8%) 25%,
-      color-mix(in hsl, #0f172a, #0ea5e9 6%) 50%,
-      color-mix(in hsl, #0f172a, #a855f7 7%) 75%,
+      #1e293b 25%,
+      #334155 50%,
+      #475569 75%,
       #0f172a 100%
     );
     background-size: 400% 400%;
@@ -202,7 +202,7 @@
   
   /* Enhanced Focus Styles */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-background;
+    @apply focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 focus:ring-offset-white;
   }
   
   /* Button Variants */

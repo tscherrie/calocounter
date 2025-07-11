@@ -52,7 +52,7 @@ export function EditFoodEntryDialog({ isOpen, entry, onClose, onSave }: EditFood
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(parseFloat(e.target.value) || 0)}
-              className="glass-light border-border/50 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                             className="glass-light border-muted/50 focus:border-emerald-500/50 focus:ring-emerald-500/20"
               min="0"
               step="0.1"
             />
@@ -62,7 +62,7 @@ export function EditFoodEntryDialog({ isOpen, entry, onClose, onSave }: EditFood
         <AlertDialogFooter className="gap-3">
           <AlertDialogCancel 
             onClick={onClose}
-            className="glass-light hover:glass-heavy border-border/50"
+            className="glass-light hover:glass-heavy border-muted/50"
           >
             Cancel
           </AlertDialogCancel>
