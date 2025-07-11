@@ -5,8 +5,7 @@ export interface FoodEntry {
   id: number;
   date: string; // YYYY-MM-DD
   name: string;
-  quantity: number;
-  unit: string;
+  grams: number;
   calories: number;
   carbs: number;
   protein: number;
